@@ -6,7 +6,7 @@
 /*   By: bwan-nan <bwan-nan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 11:56:09 by bwan-nan          #+#    #+#             */
-/*   Updated: 2018/11/24 18:09:34 by bwan-nan         ###   ########.fr       */
+/*   Updated: 2018/11/25 00:21:50 by bwan-nan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,14 @@ static char		*update_str(const int fd, char *str)
 {
 	int		ret;
 	char	buffer[BUFF_SIZE + 1];
+	char	*tmp;
 
-	while (!(ft_strchr(str, '\n')))
+	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
-		if ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
-		{
-			buffer[ret] = '\0';
-			str = ft_strjoin(str, buffer);
-		}
-		else
-			return (ret == 0 ? "EOF" : "error");
+		buffer[ret] = '\0';
+		tmp = ft_strjoin(str, buffer);
+		ft_strdel(&str);
+		str = tmp;
 	}
 	return (str);
 }
@@ -34,24 +32,26 @@ static char		*update_str(const int fd, char *str)
 int				get_next_line(const int fd, char **line)
 {
 	static char		*str = NULL;
+	char			*tmp;
 	int				i;
 
-	if (!line || !fd)
+	if (!line || fd == -1 || BUFF_SIZE <= 0)
 		return (-1);
 	if (str == NULL)
 		str = ft_strnew(0);
-	str = update_str(fd, str);
-	if (ft_strcmp(str, "error") == 0)
-		return (-1);
-	else if (ft_strcmp(str, "EOF") == 0)
-		return (0);
+	if (!ft_strchr(str, '\n'))
+		str = update_str(fd, str);
 	i = 0;
-	while (str[i] && str[i] != '\n')
-		i++;
-	if (i == 0)
-		*line = ft_strdup("");
-	else
-		*line = ft_strsub(str, 0, i);
-	str = str + i + 1;
-	return (1);
+	if (str[i])
+	{
+		while (str[i] && str[i] != '\n')
+			i++;
+		if (i == 0)
+			*line = ft_strdup("");
+		else
+			*line = ft_strsub(str, 0, i);
+		str = str + i + 1;
+		return (1);
+	}
+	return (0);
 }
