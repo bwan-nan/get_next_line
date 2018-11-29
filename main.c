@@ -6,7 +6,7 @@
 /*   By: bwan-nan <bwan-nan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 16:18:33 by bwan-nan          #+#    #+#             */
-/*   Updated: 2018/11/28 18:39:12 by bwan-nan         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:19:03 by bwan-nan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,12 @@ int main(int ac, char **av)
 	int		i;
 
 	line = NULL;
-	i = 0;
 	if (ac > 1)
 	{
 		fd = open(av[1], O_RDONLY);
-		while (i != 70)
+		while (get_next_line(fd, &line))
 		{
-			get_next_line(fd, &line);
 			printf("%s\n", line);
-			i++;
 		}
 		close(fd);
 	}

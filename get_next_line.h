@@ -6,7 +6,7 @@
 /*   By: bwan-nan <bwan-nan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 11:59:01 by bwan-nan          #+#    #+#             */
-/*   Updated: 2018/11/28 19:27:13 by bwan-nan         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:05:18 by bwan-nan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # include "./libft/libft.h"
-# define BUFF_SIZE 10000
+# define BUFF_SIZE 1
 
 int		get_next_line(const int fd, char **line);
 
