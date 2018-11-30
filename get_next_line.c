@@ -6,7 +6,7 @@
 /*   By: bwan-nan <bwan-nan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 11:56:09 by bwan-nan          #+#    #+#             */
-/*   Updated: 2018/11/30 15:40:28 by bwan-nan         ###   ########.fr       */
+/*   Updated: 2018/11/30 16:32:36 by bwan-nan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,32 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
-static void		ft_
-static a_list	*ft_lstcreate(const int fd, a_list **list)
+static int		update_line(t_lst *elem, char **line)
 {
-	a_list *tmp;
+	char	*tmp;
+	int		i;
 
-	if (!(tmp = (a_list *)malloc(sizeof(a_list))))
+	i = 0;
+	tmp = elem->str;
+	while (elem->str[i] && elem->str[i] != '\n')
+		i++;
+	if (i == 0)
+		*line = ft_strnew(0);
+	else
+		*line = ft_strsub(elem->str, 0, i);
+	if (ft_strchr(elem->str, '\n'))
+		elem->str = ft_strdup(ft_strchr(elem->str, '\n') + 1);
+	else
+		elem->str = ft_strnew(0);
+	free(tmp);
+	return (1);
+}
+
+static t_lst	*ft_lstcreate(const int fd, t_lst **list)
+{
+	t_lst *tmp;
+
+	if (!(tmp = (t_lst *)malloc(sizeof(t_lst))))
 		return (NULL);
 	tmp->fd = fd;
 	tmp->str = NULL;
@@ -46,10 +66,8 @@ static void		update_str(const int fd, char **str)
 
 int				get_next_line(const int fd, char **line)
 {
-	static a_list	*list = NULL;
-	a_list			*elem;
-	char			*tmp;
-	int				i;
+	static t_lst	*list = NULL;
+	t_lst			*elem;
 
 	if (read(fd, 0, 0) == -1 || BUFF_SIZE <= 0)
 		return (-1);
@@ -70,22 +88,7 @@ int				get_next_line(const int fd, char **line)
 		elem->str = ft_strnew(0);
 	if (!ft_strchr(elem->str, '\n'))
 		update_str(fd, &(elem->str));
-	i = 0;
-	tmp = elem->str;
-	if (elem->str[i])
-	{
-		while (elem->str[i] && elem->str[i] != '\n')
-			i++;
-		if (i == 0)
-			*line = ft_strnew(0);
-		else
-			*line = ft_strsub(elem->str, 0, i);
-		if (ft_strchr(elem->str, '\n'))
-			elem->str = ft_strdup(ft_strchr(elem->str, '\n') + 1);
-		else
-			elem->str = ft_strnew(0);
-		free(tmp);
-		return (1);
-	}
+	if (elem->str[0])
+		return (update_line(elem, line));
 	return (0);
 }
