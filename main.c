@@ -6,7 +6,7 @@
 /*   By: bwan-nan <bwan-nan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 19:25:59 by bwan-nan          #+#    #+#             */
-/*   Updated: 2019/01/09 19:29:22 by bwan-nan         ###   ########.fr       */
+/*   Updated: 2019/01/10 12:36:02 by bwan-nan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	main(int ac, char **av)
 {
-	int	fd;
+	int		fd;
 	char	*line;
 
 	line = NULL;
